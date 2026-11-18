@@ -1,0 +1,2045 @@
+/*
+    Variables
+*/
+
+:root{
+    --main-color: #2373BE; /* Navigáció, gombok */
+    --main-dark: #1B5C98;  /* A main-color sötétebb árnyalata, gomb hoverhez */
+    --active: #639FAB;     /* Kiemelések, keretek, fókusz */
+    --background: #F9FAFB;
+    --cards: #BBCDE5;
+    --page: #EDF2F8;       /* Az oldal háttere, a --cards halvány változata */
+    --text: #222222;
+    --hover: #BBCDE5;
+    --text-error: #B3261E;
+
+    --button-hover: #1B5C98;
+    --card-shadow: 0px 4px 12px 0px rgba(34, 34, 34, 0.18);
+    --button-shadow: 0px 2px 6px 0px rgba(34, 34, 34, 0.25);
+    --content-shadow: 0px 0px 15px 0px rgba(34, 34, 34, 0.35);
+
+    --title-font-size: 24pt;
+    --font-size: 16pt;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+    list-style: none;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: var(--page);
+    overflow: hidden;
+}
+
+.content{
+    width: 80%;
+    height: 80%; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.error{
+    font-style: italic;
+    color: var(--text-error);
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+
+/* FORM START */
+
+/* FORM START */
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 1rem;
+
+    padding: 1.75rem;
+    min-height: 40%;
+    min-width: 30%;
+
+    background-color: var(--background);
+    border: 1px solid var(--cards);
+    border-top: 4px solid var(--main-color);
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+}
+
+form > h1{
+    font-size: var(--title-font-size);
+    text-align: center;
+    color: var(--main-color);
+}
+
+form > label{
+    font-size: 11pt;
+    font-weight: 600;
+}
+
+/* A :where() miatt a specificitás alacsony marad, így a .chat-footer input, .grade-input-field stb. szabályaid továbbra is felülírják */
+input:where(:not([type="checkbox"], [type="radio"], [type="hidden"])),
+form > textarea{
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 12pt;
+    color: var(--text);
+    background-color: white;
+    border: 1px solid var(--cards);
+    border-radius: 6px;
+    outline: none;
+    transition: border-color .2s ease;
+}
+
+form > textarea{
+    min-height: 200px;
+    resize: vertical;
+}
+
+:where(input, textarea):focus{
+    border-color: var(--active);
+    outline: 2px solid var(--active);
+}
+
+::placeholder{
+    color: color-mix(in srgb, var(--text) 45%, transparent);
+}
+
+/* FORM END */
+
+
+
+button{
+    padding: 15px;
+    min-width: 150px;
+    font-size: 14pt;
+    font-weight: bold;
+
+    background: var(--main-color);
+    color: var(--background);
+    
+    box-shadow: var(--button-shadow);
+    border-radius: 5px;
+    
+    cursor: pointer;
+
+    transition: .2s all ease;
+}
+
+button:hover{
+    background-color: var(--button-hover);
+}
+
+
+
+/* NAV START */
+
+body > nav{
+    position: fixed;
+    top:0;
+    
+    align-items: center;
+
+    background-color: var(--main-color);
+    border-bottom: 1px solid var(--main-dark);
+
+    width: 100vw;
+    padding: 1rem;
+    
+    text-decoration: none;
+    
+    display: flex;
+    justify-content: space-around;
+}
+
+body > nav > ul{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: fit-content;
+}
+
+
+body > nav > ul > li > a{
+    display: inline-block;
+    color: var(--background);
+    transition: .2s all ease-in-out;
+    padding: 5px;
+}
+
+body > nav > ul > li > a.active{
+    color: var(--background);
+    background-color: var(--main-dark);
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+body > nav > ul > li > a:hover, nav > ul > li > a:hover:focus{
+    color: var(--hover);
+    animation: jump 0.4s ease-in-out;
+}
+
+/* NAV END */
+
+
+/* POSTS START */
+form:has(#search){
+    box-shadow: none;
+    background-color: transparent;
+    flex-direction: row;
+    min-height: 0;
+    min-width: 0;
+    width: 80%;
+    max-width: 600px;
+    margin-block: 1rem;
+    padding: 10px 16px;
+    gap: 10px;
+}
+
+form:has(#search) #search{
+    flex: 1;
+    width: auto;
+    margin: 0;
+}
+
+form:has(#search) button{
+    min-width: 0;
+    padding: 10px 20px;
+    font-size: 12pt;
+}
+
+
+.posts{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-content: start;
+    gap: 1.25rem;
+    width: 80%;
+    min-height: 0;
+    padding: 1rem;
+    overflow-y: auto;
+}
+.post-card{
+    padding: 14px 16px;
+    border: 1px solid var(--cards);
+    border-top: 4px solid var(--main-color);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    background-color: var(--background);
+    color: var(--text);
+    transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
+}
+
+.post-card:hover{
+    transform: translateY(-3px);
+    box-shadow: var(--content-shadow);
+}
+
+.post-card > p{
+    overflow-wrap: anywhere;
+}
+
+.post-card:nth-child(1){
+    grid-column: span 3;
+    border-top-color: var(--active);
+}
+
+.post-card:nth-child(2){
+    grid-column: span 2;
+}
+
+.feed-post-author{
+    font-size: 12pt;
+    font-style: italic;
+    color: var(--main-dark);
+    margin-bottom: 4px;
+}
+
+
+.feed-post-title{
+    font-size: 18pt;
+    font-weight: bold;
+    color: var(--main-color);
+    border-bottom: 1px solid var(--cards);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-card:nth-child(1) .feed-post-title{
+    font-size: 22pt;
+}
+
+.feed-post-title a{
+    color: inherit;
+    transition: color .2s ease-in-out;
+}
+
+.feed-post-title a:hover{
+    color: var(--main-dark);
+}
+
+.feed-post-content{
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-card:nth-child(1) .feed-post-content{
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+}
+
+/* A post amit megnyitott a felhasználó, tehát nem ami a főoldalon van kilistázva */
+.post{
+    display: flex;
+    width: 80%;
+    height: 70%;
+    background-color: var(--background);
+    border-radius: 10px;
+    outline: 2px solid var(--main-color);
+    box-shadow: var(--content-shadow);
+    overflow: hidden;
+}
+
+.post-sidebar{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25%;
+    min-width: 220px;
+    padding: 1.25rem;
+    background-color: var(--cards);
+    border-right: 1px solid var(--main-color);
+    overflow-y: auto;
+}
+
+.post-sidebar > div > h1{
+    color: var(--main-dark);
+    padding-bottom: 4px;
+    overflow-wrap: anywhere;
+}
+
+.post-date{
+    font-style: italic;
+    font-size: 10pt;
+    opacity: .75;
+}
+
+/* Gombok: Vissza, Szerkesztés, Törlés */
+.post-sidebar > div:last-child{
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+.post-sidebar > div > a{
+    display: block;
+    width: fit-content;
+    padding: 10px 16px;
+    font-size: 14pt;
+    text-align: center;
+    color: var(--background);
+    background-color: var(--main-color);
+    border-radius: 5px;
+    box-shadow: var(--button-shadow);
+    transition: transform .2s ease-in-out, background-color .2s ease-in-out;
+}
+
+.post-sidebar > div > a:hover,
+.post-sidebar > div > a:focus{
+    background-color: var(--button-hover);
+    transform: scale(1.05);
+}
+
+.post-sidebar > div > a[href*="/torles/"]{
+    background-color: var(--text-error);
+}
+
+.post-sidebar > div > a[href*="/torles/"]:hover,
+.post-sidebar > div > a[href*="/torles/"]:focus{
+    background-color: color-mix(in srgb, var(--text-error) 80%, black);
+}
+
+.post-content{
+    flex: 1;
+    padding: 1.5rem;
+    line-height: 1.6;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+    overflow-y: auto;
+}
+
+/* POSTS END */
+
+/* PAGINATION FOR POSTS */
+
+.pagination{
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-block: 1rem;
+}
+
+.pagination li > a,
+.pagination li > span{
+    display: inline-block;
+    min-width: 38px;
+    padding: 8px 12px;
+    text-align: center;
+    color: var(--main-color);
+    background-color: var(--background);
+    border: 1px solid var(--cards);
+    border-radius: 6px;
+    transition: .2s all ease;
+}
+
+.pagination li > a:hover{
+    background-color: var(--cards);
+}
+
+.pagination li.active > span{
+    color: var(--background);
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+}
+
+.pagination li.disabled > span{
+    opacity: .5;
+}
+
+/* PAGINATION FOR POSTS END */
+
+/* GRADES TABLE STARTS */
+
+.grade-header{
+    margin-bottom: 3rem;
+    width: 80%;
+
+    display: none;
+    gap: 1rem;
+    text-align: justify;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+#helpText{
+    font-size: var(--font-size);
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+
+#helpText:hover{
+    color: var(--button-hover);
+}
+
+
+#help {
+    display: grid;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in, opacity 0.2s ease-in-out;
+}
+
+#help.visible {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.grade-alert{
+    font-style: italic;
+    color: var(--main-color);
+    margin-bottom: 10px;
+}
+
+.grades-table-wrapper {
+    width: 80%;
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: var(--content-shadow);
+}
+
+.grades-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--background);
+}
+
+.grades-table thead th {
+    color: var(--background);
+    background: var(--main-color);
+
+    padding: 14px 18px;
+    border-bottom: 2px solid #ddd;
+
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.grades-table .subject-header {
+    left: 0;
+
+    text-align: left;
+    min-width: 180px;
+
+    background: var(--main-color);
+}
+
+.grades-table .subject-name {
+    left: 0;
+
+    min-width: 180px;
+    padding: 14px 18px;
+
+    text-align: left;
+    font-weight: 600;
+
+    background: var(--background);
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #eee;
+
+    white-space: nowrap;
+}
+
+.grades-table td {
+    padding: 12px 16px;
+
+    text-align: center;
+
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #eee;
+
+    min-width: 100px;
+}
+
+.grades-table tbody tr:hover td,
+.grades-table tbody tr:hover .subject-name {
+    background: var(--hover);
+}
+
+.grades-table tbody tr:hover .grade{
+    background: var(--background);
+}
+
+.grade {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 32px;
+    height: 32px;
+
+    margin: 2px;
+
+    border-radius: 6px;
+
+    background: var(--cards);
+
+    font-weight: 600;
+}
+
+.no-grade {
+    color: var(--main-color);
+    cursor: pointer;
+}
+
+.grade-cell > div, 
+.grade-cell form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; 
+    gap: 6px;                
+    flex-wrap: nowrap;       
+}
+
+.add-grade-btn,
+.grade-cell form button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    max-width: 24px;
+    height: 24px;
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    color: var(--background);
+
+    border-radius: 4px;
+    border: 1px solid #ccc;
+
+    background-color: var(--main-color);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+#chooseWindow{
+    display: none;
+}
+
+.add-grade-btn:hover,
+.grade-cell form button:hover {
+    background-color: var(--background);
+    color: var(--main-color);
+}
+
+.grade-input-field {
+    width: 24px;
+    height: 28px;
+    padding: 0 4px;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.grade-input-field:focus {
+    border-color: var(--main-color);
+}
+
+.grade-input-field::-webkit-inner-spin-button,
+.grade-input-field::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.popup{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup > form{
+    width: 20%;
+    height: 20%;
+}
+
+#edit-grade-window{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#edit-grade-window > form{
+    width: 20%;
+    height: 20%;
+}
+
+/* GRADES TABLE ENDS */
+
+/* ADMIN PANEL STARTS */
+
+.admin-panel{
+    background-color: var(--background);
+    outline: 2px solid var(--main-color);
+    border-radius: 10px;
+    box-shadow: var(--content-shadow);
+
+    min-height: 80%;
+    min-width: 80%;
+    
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.admin-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-nav{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 1px solid var(--main-color);
+    background-color: var(--main-color);
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.admin-nav > a{
+    margin: 10px;
+    padding: 7px;
+    font-size: var(--font-size);
+    color: var(--background);
+    border: 1px solid var(--main-color);
+
+    border-radius: 10px;
+    transition: .3s all ease-in-out;
+}
+
+.admin-nav > a.active{
+    color: var(--main-color);
+    background-color: var(--background);
+    border-color: var(--background);
+    font-weight: 600;
+}
+
+.admin-nav > a:hover, .admin-nav > a:focus{
+    border: 1px solid var(--background);
+}
+
+.admin-choose{
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: center;
+    gap: 1.5rem 2.5rem;
+    margin-top: 1.5rem;
+}
+
+.admin-column{
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.admin-column > a,
+.student-choose > a{
+    min-width: 110px;
+    padding: 12px 24px;
+    text-align: center;
+    font-size: var(--font-size);
+    font-weight: 600;
+    color: var(--main-color);
+    background-color: var(--background);
+    border: 1px solid var(--cards);
+    border-radius: 8px;
+    box-shadow: var(--button-shadow);
+    transition: transform .2s ease-in-out, background-color .2s ease-in-out, color .2s ease-in-out;
+}
+
+.admin-column > a:hover,
+.admin-column > a:focus,
+.student-choose > a:hover,
+.student-choose > a:focus{
+    color: var(--background);
+    background-color: var(--main-color);
+    transform: translateY(-2px);
+}
+
+.student-choose{
+    columns: 3;
+    column-gap: 1.5rem;
+    margin-top: 1.5rem;
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 4px;
+}
+
+.student-choose > a{
+    display: block;
+    margin-bottom: .75rem;
+    break-inside: avoid;
+}
+
+
+/* ABSENCE ADMIN START */
+
+.admin-actions{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(200px, 260px));
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.admin-actions > a{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+
+    padding: 2rem 1.5rem;
+    text-align: center;
+    font-size: var(--font-size);
+    font-weight: 600;
+    color: var(--main-color);
+
+    background-color: var(--background);
+    border: 1px solid var(--cards);
+    border-top: 4px solid var(--main-color);
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+
+    transition: transform .2s ease-in-out, box-shadow .2s ease-in-out, border-top-color .2s ease-in-out;
+}
+
+.admin-actions > a > span{
+    font-size: 10pt;
+    font-weight: 400;
+    color: var(--text);
+    opacity: .7;
+}
+
+.admin-actions > a:hover,
+.admin-actions > a:focus{
+    transform: translateY(-3px);
+    border-top-color: var(--active);
+    box-shadow: var(--content-shadow);
+}
+
+/* ADMIN PANEL ENDS */
+
+/* ABSENCES TABLE STARTS */
+
+/* Órarend: heti nézet, egy oszlop egy nap */
+.absence-table{
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    padding: 1.5rem;
+    color: var(--text);
+}
+
+.absence-table-time{
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: .75rem;
+    font-size: 13pt;
+}
+
+.absence-table-time strong{
+    font-size: var(--title-font-size);
+    color: var(--main-color);
+}
+
+.absence-week{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 4px;
+}
+
+.absence-day{
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+.absence-day-name{
+    padding: 8px;
+    text-align: center;
+    font-size: 12pt;
+    font-weight: 600;
+    color: var(--background);
+    background-color: var(--main-color);
+    border-radius: 8px;
+}
+
+.absence-day.today .absence-day-name{
+    background-color: var(--main-dark);
+    outline: 2px solid var(--active);
+}
+
+.absence-table-lessons{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    color: var(--text);
+    background-color: var(--background);
+    border: 1px solid var(--cards);
+    border-left: 4px solid var(--main-color);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    transition: transform .2s ease-in-out, box-shadow .2s ease-in-out, border-left-color .2s ease-in-out;
+}
+
+.absence-table-lessons:hover,
+.absence-table-lessons:focus{
+    transform: translateY(-2px);
+    border-left-color: var(--active);
+    box-shadow: var(--content-shadow);
+}
+
+.absence-lesson-time{
+    font-size: 10pt;
+    opacity: .7;
+}
+
+.absence-lesson-subject{
+    font-weight: 600;
+    color: var(--main-color);
+    overflow-wrap: anywhere;
+}
+
+.absence-lesson-class{
+    font-size: 10pt;
+}
+
+.absence-day-empty{
+    text-align: center;
+    opacity: .4;
+}
+
+/* Hiányzások listája (/hianyzasok) */
+.absence-content{
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size);
+    text-align: center;
+    padding: 1rem;
+}
+
+.absence-list{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+.absence-header{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-bottom: 1px solid var(--main-color);
+    padding-bottom: 1rem;
+}
+
+form.hidden-form{
+    all: revert;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form.hidden-form > button{
+    all: revert;
+    outline: none;
+    background: transparent;
+    border: none;
+}
+
+/* ABSENCES TABLE ENDS */
+
+
+/* ABSENCE ADMIN START */
+
+/* Választó oldal: Hiányzás rögzítése / megtekintése */
+.admin-actions{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(200px, 260px));
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.admin-actions > a{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+
+    padding: 2rem 1.5rem;
+    text-align: center;
+    font-size: var(--font-size);
+    font-weight: 600;
+    color: var(--main-color);
+
+    background-color: var(--background);
+    border: 1px solid var(--cards);
+    border-top: 4px solid var(--main-color);
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+
+    transition: transform .2s ease-in-out, box-shadow .2s ease-in-out, border-top-color .2s ease-in-out;
+}
+
+.admin-actions > a > span{
+    font-size: 10pt;
+    font-weight: 400;
+    color: var(--text);
+    opacity: .7;
+}
+
+.admin-actions > a:hover,
+.admin-actions > a:focus{
+    transform: translateY(-3px);
+    border-top-color: var(--active);
+    box-shadow: var(--content-shadow);
+}
+
+/* Hiányzás rögzítése: diák kiválasztása */
+.absence-pick{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: min(100%, 760px);
+    padding: 1.5rem;
+    color: var(--text);
+}
+
+.absence-pick-header h2{
+    font-size: var(--title-font-size);
+    color: var(--main-color);
+}
+
+.absence-pick-header p{
+    opacity: .7;
+}
+
+.absence-pick h3{
+    font-size: 13pt;
+    font-weight: 600;
+}
+
+/* A globális form szabályok (kártya, min-height, keret) itt kikapcsolva */
+.absence-pick > form{
+    align-items: stretch;
+    justify-content: flex-start;
+    min-height: 0;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.absence-pick-list{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: .75rem;
+    max-height: 50vh;
+    overflow-y: auto;
+    padding: 4px;
+}
+
+.absence-pick-list button{
+    min-width: 0;
+    padding: 12px 16px;
+    font-size: 12pt;
+    font-weight: 600;
+    color: var(--main-color);
+    background: var(--background);
+    border: 1px solid var(--cards);
+    border-radius: 8px;
+    box-shadow: var(--button-shadow);
+    transition: transform .2s ease-in-out, background-color .2s ease-in-out, color .2s ease-in-out;
+}
+
+.absence-pick-list button:hover,
+.absence-pick-list button:focus{
+    color: var(--background);
+    background: var(--main-color);
+    transform: translateY(-2px);
+}
+
+/* ABSENCE ADMIN END */
+
+.student-list{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size);
+    justify-content: center;
+    align-items: center;
+}
+
+.student-list > a{
+    padding-block: 5px;
+    color: var(--text);
+    transition: all .2s ease-in-out;
+}
+
+.student-list > a:hover{
+    transform: scale(1.1);
+    color: var(--main-color);
+}
+
+/* Messages */
+.messages-page{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    grid-template-rows: auto 1fr;
+    background-color: var(--background);
+    border-radius: 10px;
+    box-shadow: var(--content-shadow);
+    overflow: hidden;
+    color: var(--text);
+}
+
+/* Fejléc */
+.messages-header{
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    background-color: var(--main-color);
+}
+
+/* Alap gomb (kék fejlécen): világos gomb */
+.btn{
+    display: inline-block;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--background);
+    color: var(--main-color);
+    font-size: 12pt;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--button-shadow);
+    transition: .2s all ease;
+}
+
+.btn:hover{
+    background-color: var(--cards);
+}
+
+/* Elsődleges gomb (világos háttéren): kék gomb */
+.chat-footer .btn,
+.compose-send{
+    background-color: var(--main-color);
+    color: var(--background);
+}
+
+.chat-footer .btn:hover,
+.compose-send:hover{
+    background-color: var(--main-dark);
+}
+
+/* Bal oszlop */
+.message-list{
+    min-height: 0;
+    overflow-y: auto;
+    border-right: 1px solid var(--cards);
+    background-color: var(--background);
+}
+
+.message-list-item{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 16px;
+    color: var(--text);
+    border-bottom: 1px solid rgba(34, 34, 34, 0.08);
+    border-left: 4px solid transparent;
+    transition: .2s all ease;
+}
+
+.message-list-item:hover{
+    background-color: color-mix(in srgb, var(--cards) 40%, var(--background));
+}
+
+.message-list-item.active{
+    border-left-color: var(--main-color);
+    background-color: var(--cards);
+}
+
+.message-list-name{
+    font-size: 13pt;
+    font-weight: 600;
+}
+
+.message-list-preview{
+    font-size: 11pt;
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Jobb oszlop */
+.chat{
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background-color: var(--page);
+}
+
+.chat-header{
+    padding: 12px 16px;
+    font-size: 16pt;
+    font-weight: 600;
+    color: var(--main-color);
+    background-color: var(--background);
+    border-bottom: 1px solid var(--cards);
+}
+
+/* column-reverse: az oldal alapból a legalsó (legújabb) üzenetnél nyílik meg, JS nélkül */
+.chat-messages{
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 8px;
+    padding: 16px;
+}
+
+.bubble{
+    max-width: 70%;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 12pt;
+    word-break: break-word;
+    box-shadow: var(--button-shadow);
+}
+
+.bubble.sent{
+    align-self: flex-end;
+    background-color: var(--main-color);
+    color: var(--background);
+    border-bottom-right-radius: 4px;
+}
+
+.bubble.received{
+    align-self: flex-start;
+    background-color: var(--cards);
+    color: var(--text);
+    border-bottom-left-radius: 4px;
+}
+
+.chat-footer{
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background-color: var(--background);
+    border-top: 1px solid var(--cards);
+}
+
+/* A globális input szabályokat (width: 80%, margin, outline) itt felülírjuk */
+.chat-footer input{
+    flex: 1;
+    width: auto;
+    height: 40px;
+    margin: 0;
+    padding: 8px 12px;
+    font-size: 12pt;
+    border: 1px solid var(--cards);
+    border-radius: 6px;
+    outline: none;
+}
+
+.chat-footer input:focus{
+    outline: 2px solid var(--active);
+}
+
+.chat-footer > button{
+    height: 40px;
+}
+
+.chat-empty{
+    grid-row: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.6;
+}
+
+/* Új üzenet oldal */
+.new-message{
+    width: 50%;
+    min-width: 360px;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background-color: var(--background);
+    border-radius: 10px;
+    box-shadow: var(--content-shadow);
+    overflow: hidden;
+    color: var(--text);
+}
+
+.new-message-header{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    background-color: var(--main-color);
+    color: var(--background);
+}
+
+.new-message-header h1{
+    font-size: var(--title-font-size);
+}
+
+/* A globális form szabályok (középre igazítás, árnyék, min-height, háttér) itt felülírva */
+.compose{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+    min-height: 0;
+    min-width: 0;
+    padding: 24px 16px;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: var(--background);
+    overflow-y: auto;
+}
+
+.compose label{
+    font-size: 12pt;
+    font-weight: 600;
+}
+
+.compose select,
+.compose textarea{
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 12pt;
+    border: 1px solid var(--cards);
+    border-radius: 6px;
+    outline: none;
+    background-color: white;
+}
+
+.compose textarea{
+    resize: vertical;
+}
+
+.compose select:focus,
+.compose textarea:focus{
+    outline: 2px solid var(--active);
+}
+
+.compose-error{
+    color: var(--text-error);
+    font-size: 11pt;
+}
+
+.compose-send{
+    align-self: flex-end;
+    margin-top: 8px;
+}
+
+
+/* PROFILE START */
+
+.profile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+
+    width: min(100%, 480px);
+    padding: 2rem 1.75rem;
+
+    color: var(--text);
+    background-color: var(--background);
+    border: 1px solid var(--cards);
+    border-top: 4px solid var(--main-color);
+    border-radius: 10px;
+    box-shadow: var(--content-shadow);
+
+    width: min(100%, 560px);
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.profile-avatar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 80px;
+    height: 80px;
+    margin-bottom: .5rem;
+
+    font-size: 24pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--background);
+
+    background-color: var(--main-color);
+    border-radius: 50%;
+    box-shadow: var(--button-shadow);
+}
+
+.profile-name{
+    font-size: var(--title-font-size);
+    text-align: center;
+    color: var(--main-color);
+    overflow-wrap: anywhere;
+}
+
+.profile-role{
+    padding: 4px 14px;
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--main-dark);
+    background-color: var(--cards);
+    border-radius: 999px;
+}
+
+.profile-details{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.profile-details > div{
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 12px 0;
+    border-top: 1px solid var(--cards);
+}
+
+.profile-details dt{
+    font-size: 11pt;
+    opacity: .7;
+}
+
+.profile-details dd{
+    font-weight: 600;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.profile-links{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .6rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.profile-link{
+    padding: 10px 14px;
+    text-align: center;
+    font-size: 12pt;
+    font-weight: 600;
+    color: var(--main-color);
+    background-color: var(--background);
+    border: 1px solid var(--cards);
+    border-radius: 8px;
+    box-shadow: var(--button-shadow);
+    transition: transform .2s ease-in-out, background-color .2s ease-in-out, color .2s ease-in-out;
+}
+
+.profile-link:hover,
+.profile-link:focus{
+    color: var(--background);
+    background-color: var(--main-color);
+    transform: translateY(-2px);
+}
+
+/* PROFILE END */
+
+
+/* STUDENT PAGES START */
+
+.student-page{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-height: 100%;
+    color: var(--text);
+}
+
+.student-page-header{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.student-page-header h1{
+    font-size: var(--title-font-size);
+    color: var(--main-color);
+}
+
+/* A .btn alapból világos gomb kék háttéren, itt világos háttéren kék kell */
+.student-page-header .btn{
+    color: var(--background);
+    background-color: var(--main-color);
+}
+
+.student-page-header .btn:hover{
+    background-color: var(--main-dark);
+}
+
+.student-table-wrapper{
+    overflow: auto;
+    border: 1px solid var(--cards);
+    border-radius: 10px;
+    box-shadow: var(--content-shadow);
+}
+
+.student-table{
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--background);
+}
+
+.student-table thead th{
+    padding: 12px 16px;
+    color: var(--background);
+    background-color: var(--main-color);
+    white-space: nowrap;
+}
+
+.student-table tbody th{
+    padding: 12px 16px;
+    color: var(--main-dark);
+    background-color: var(--cards);
+}
+
+.student-table td{
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--cards);
+    border-right: 1px solid var(--cards);
+}
+
+.student-table tbody tr:hover td{
+    background-color: color-mix(in srgb, var(--cards) 40%, var(--background));
+}
+
+.student-empty{
+    opacity: .7;
+}
+
+.timetable-subject{
+    display: block;
+}
+
+.timetable-class{
+    display: block;
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--main-color);
+}
+
+/* STUDENT PAGES END */
+
+
+/* DASHBOARD START */
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: min(100%, 900px);
+    max-height: 100%;
+    color: var(--text);
+}
+
+.dashboard-header h1{
+    font-size: var(--title-font-size);
+    color: var(--main-color);
+}
+
+.dashboard-header p{
+    opacity: .7;
+}
+
+/* Sok kártyánál a rács saját görgetősávot kap, mert a body overflow: hidden */
+.dashboard-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    overflow-y: auto;
+    padding: 4px;
+}
+
+.dashboard-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+
+    padding: 1.75rem 1.25rem;
+    text-align: center;
+    font-size: var(--font-size);
+    font-weight: 600;
+    color: var(--main-color);
+
+    background-color: var(--background);
+    border: 1px solid var(--cards);
+    border-top: 4px solid var(--main-color);
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+
+    transition: transform .2s ease-in-out, box-shadow .2s ease-in-out, border-top-color .2s ease-in-out;
+}
+
+.dashboard-card > span{
+    font-size: 10pt;
+    font-weight: 400;
+    color: var(--text);
+    opacity: .7;
+}
+
+.dashboard-card:hover,
+.dashboard-card:focus{
+    transform: translateY(-3px);
+    border-top-color: var(--active);
+    box-shadow: var(--content-shadow);
+}
+
+/* forcing laracloud */
+/* DASHBOARD END */
+.chat-back{
+    display: none;
+}
+
+@media (max-width: 768px){
+
+    :root{
+        --title-font-size: 18pt;
+        --font-size: 12pt;
+    }
+
+    /* Alap elrendezés: a nav már nem fixed, a .content görgethető */
+    body{
+        height: 100dvh;
+        justify-content: flex-start;
+    }
+
+    body > nav{
+        position: static;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .25rem 1rem;
+        width: 100%;
+        padding: .5rem;
+    }
+
+    body > nav > ul{
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .25rem .5rem;
+    }
+
+    body > nav > ul > li > a{
+        padding: 6px;
+        font-size: 11pt;
+    }
+
+    .content{
+        flex: 1;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: .75rem;
+        justify-content: flex-start;
+        overflow-y: auto;
+    }
+
+    /* Ha a tartalom magasabb, mint a képernyő, nem vágódik le, hanem görgethető */
+    .content > *{
+        flex-shrink: 0;
+    }
+
+    .content > :first-child{ margin-top: auto; }
+    .content > :last-child{ margin-bottom: auto; }
+
+    /* Űrlapok */
+    form{
+        width: min(100%, 420px);
+        min-width: 0;
+        min-height: 0;
+        padding: 1.25rem;
+    }
+
+    form > textarea{
+        min-height: 140px;
+    }
+
+    form:has(#search){
+        width: 100%;
+        max-width: none;
+        padding: 0;
+        margin-block: .5rem;
+    }
+
+    form:has(#search) button{
+        padding: 10px 14px;
+    }
+
+    /* Popupok (jegy beírása / szerkesztése) */
+    .popup,
+    #edit-grade-window{
+        top: 0;
+        left: 0;
+        z-index: 100;
+        width: 100%;
+        height: 100dvh;
+    }
+
+    .popup > form,
+    #edit-grade-window > form{
+        width: 90%;
+        height: auto;
+        min-height: 0;
+    }
+
+    /* Hírfolyam */
+    .posts{
+        grid-template-columns: 1fr;
+        width: 100%;
+        padding: .5rem 0;
+        overflow: visible;
+    }
+
+    .post-card:nth-child(1),
+    .post-card:nth-child(2){
+        grid-column: auto;
+    }
+
+    .feed-post-title,
+    .post-card:nth-child(1) .feed-post-title{
+        font-size: 14pt;
+    }
+
+    /* Megnyitott hír: a sidebar a tartalom fölé kerül */
+    .post{
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+    }
+
+    .post-sidebar{
+        width: 100%;
+        min-width: 0;
+        gap: 1rem;
+        border-right: none;
+        border-bottom: 1px solid var(--main-color);
+        overflow-y: visible;
+    }
+
+    .post-sidebar > div:last-child{
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .post-sidebar > div > a{
+        padding: 8px 12px;
+        font-size: 11pt;
+    }
+
+    .post-content{
+        flex: none;
+        padding: 1rem;
+        overflow-y: visible;
+    }
+
+    .pagination{
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .pagination li > a,
+    .pagination li > span{
+        min-width: 34px;
+        padding: 6px 10px;
+    }
+
+    /* Jegytábla: vízszintesen görgethető */
+    .grade-header{
+        width: 100%;
+        margin-bottom: 1rem;
+        grid-template-columns: 1fr;
+    }
+
+    .grades-table-wrapper{
+        width: 100%;
+    }
+
+    .grades-table{
+        min-width: 640px;
+    }
+
+    .grades-table thead th{
+        padding: 10px 12px;
+        font-size: 10pt;
+    }
+
+    .grades-table .subject-header,
+    .grades-table .subject-name{
+        min-width: 110px;
+        padding: 10px 12px;
+        font-size: 10pt;
+        white-space: normal;
+    }
+
+    .grades-table td{
+        padding: 8px 10px;
+        min-width: 70px;
+    }
+
+    /* 16px alatti inputnál az iOS Safari ráközelít fókuszkor */
+    .grade-input-field{
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    /* Admin panel */
+    .admin-panel{
+        min-width: 100%;
+        min-height: 0;
+    }
+
+    .admin-nav{
+        flex-wrap: wrap;
+    }
+
+    .admin-nav > a{
+        margin: 6px;
+        padding: 6px 10px;
+        font-size: 11pt;
+    }
+
+    .admin-choose{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .admin-column > a,
+    .student-choose > a{
+        min-width: 0;
+        padding: 10px 14px;
+        font-size: 12pt;
+    }
+
+    .student-choose{
+        columns: 1;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .admin-actions{
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    /* Órarend (tanári heti nézet) és hiányzások */
+    .absence-table{
+        padding: .5rem;
+    }
+
+    .absence-table-time{
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        font-size: 11pt;
+    }
+
+    .absence-table-time strong{
+        font-size: 16pt;
+    }
+
+    .absence-week{
+        grid-template-columns: 1fr;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .absence-content{
+        padding: .5rem;
+        font-size: 11pt;
+        overflow-x: auto;
+    }
+
+    .absence-list,
+    .absence-header{
+        min-width: 560px;
+        gap: .5rem;
+    }
+
+    .absence-pick{
+        padding: .5rem;
+    }
+
+    .absence-pick-list{
+        grid-template-columns: 1fr 1fr;
+        max-height: none;
+        overflow: visible;
+    }
+
+    /* Üzenetek: egyszerre csak a lista VAGY a chat látszik */
+    .messages-page{
+        grid-template-columns: 1fr;
+    }
+
+    .messages-page:has(.chat-header) .message-list{
+        display: none;
+    }
+
+    .messages-page:not(:has(.chat-header)) .chat{
+        display: none;
+    }
+
+    .messages-header{
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 8px 10px;
+    }
+
+    .messages-header .btn{
+        flex: 1;
+        padding: 8px 10px;
+        font-size: 10pt;
+        text-align: center;
+    }
+
+    .message-list{
+        border-right: none;
+    }
+
+    .chat-header{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        font-size: 13pt;
+    }
+
+    .chat-back{
+        display: inline-block;
+        padding: 0 6px;
+        font-size: 16pt;
+        line-height: 1;
+        color: var(--main-color);
+    }
+
+    .chat-messages{
+        padding: 12px;
+    }
+
+    .bubble{
+        max-width: 85%;
+    }
+
+    .chat-footer{
+        gap: 8px;
+        padding: 8px 10px;
+    }
+
+    .chat-footer > button{
+        min-width: 0;
+        padding: 0 16px;
+        font-size: 11pt;
+    }
+
+    .new-message{
+        width: 100%;
+        min-width: 0;
+    }
+
+    .compose{
+        padding: 16px 12px;
+    }
+
+    /* Profil */
+    .profile{
+        padding: 1.25rem 1rem;
+        max-height: none;
+        overflow-y: visible;
+    }
+
+    .profile-links{
+        grid-template-columns: 1fr;
+    }
+
+    /* Diák és tanár oldalak (órarend, hiányzások) */
+    .student-page{
+        max-height: none;
+    }
+
+    .student-page-header{
+        flex-wrap: wrap;
+        gap: .5rem;
+    }
+
+    .student-table thead th,
+    .student-table tbody th{
+        padding: 8px 10px;
+        font-size: 10pt;
+        white-space: nowrap;
+    }
+
+    .student-table td{
+        padding: 8px 10px;
+        font-size: 11pt;
+    }
+
+    /* Az első oszlop (idősáv) görgetés közben a helyén marad */
+    .student-table tbody th,
+    .student-table thead th:first-child{
+        position: sticky;
+        left: 0;
+        z-index: 1;
+    }
+
+    /* Dashboard */
+    .dashboard{
+        max-height: none;
+        gap: 1rem;
+    }
+
+    .dashboard-grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .75rem;
+        overflow: visible;
+    }
+
+    .dashboard-card{
+        padding: 1.25rem .75rem;
+    }
+}
+
+/* MOBILE END */
+

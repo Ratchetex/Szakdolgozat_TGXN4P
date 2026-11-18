@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\User;
+use App\Models\Grade;
+
+class GradeService {
+   private array $months = [
+    "Szeptember",
+    "Október",
+    "November",
+    "December",
+    "Január",
+    "Február",
+    "Március",
+    "Április",
+    "Május",
+    "Június"
+   ];
+
+   // Létrehozzuk a mappot a jegyeknek, hogy meg tudjuk jeleníteni a hónapokat akkor is, ha nincs benne jegy
+   public function createGradesMap(){
+        $map = [];
+
+        foreach($this->months as $month)
+            $map[$month] = [];
+
+        return $map;
+   }
+
+   // miután létrehoztuk a mappot a jegyeknek, feltöltjük őket
+   public function getGradesByMonthAndSubject(User $student){
+        $map = $this->createGradesMap();
+
+        foreach($student->grades as $grade){
+            // lekérjük a jegy hónapját
+            $month = $grade->month;
+            // lekérjük a tantárgy nevét
+            $subject = $grade->subject->name;
+
+            // hónap és tantárgy alapján hívatkozunk rá
+            // a harmadik üres [] olyan mintha += lenne, hozzáadja a maphoz a jegy értékét
+            // tehát $map['Szeptember']['Történelem'] visszaad nekünk egy ötöst például vagy többet, ha több jegyünk van szeptemberben történelemből
+            $map[$month][$subject][] = $grade;
+        }
+
+        // Megnézzük, hogy milyen tantárgyai vannak az adott osztálynak
+        // Mivel a diákon keresztül érjük el az osztályt és az órákat pedig osztályokon keresztül muszáj filterelni
+        $subjects = $student->schoolClass->lessons->map(fn ($lesson) => $lesson->subject)->unique('id');
+
+        return ['grades' => $map, 'subjects' => $subjects];
+   }
+
+   public function createGrade(array $data){
+        return Grade::create([
+            'student_id' => $data['student_id'],
+            'teacher_id' => $data['teacher_id'],
+            'subject_id' => $data['subject_id'],
+            'month' => $data['month'],
+            'grade_value' => $data['grade_value'],
+            'description' => $data['description'],
+            'issued_at' => $data['issued_at'] ?? now()->toDateString(),
+        ]);
+   }
+
+   public function updateGrade(int $gradeID, array $data){
+        $grade = Grade::findOrFail($gradeID);
+
+        $grade->update([
+            'student_id' => $data['student_id'],
+            'teacher_id' => $data['teacher_id'],
+            'subject_id' => $data['subject_id'],
+            'month' => $data['month'],
+            'grade_value' => $data['grade_value'],
+            'description' => $data['description'],
+            'issued_at' => $data['issued_at'] ?? now()->toDateString(),
+        ]);
+
+        return $grade;  
+   }
+
+}
